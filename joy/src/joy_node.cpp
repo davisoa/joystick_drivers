@@ -49,6 +49,7 @@ private:
   bool open_;
   bool sticky_buttons_;
   bool default_trig_val_;
+  std::string joy_topic_name_;
   std::string joy_dev_;
   std::string joy_dev_name_;
   double deadzone_;
@@ -150,7 +151,6 @@ public:
 
     // Parameters
     ros::NodeHandle nh_param("~");
-    pub_ = nh_.advertise<sensor_msgs::Joy>("joy", 1);
     nh_param.param<std::string>("dev", joy_dev_, "/dev/input/js0");
     nh_param.param<std::string>("dev_name", joy_dev_name_, "");
     nh_param.param<double>("deadzone", deadzone_, 0.05);
@@ -158,6 +158,9 @@ public:
     nh_param.param<double>("coalesce_interval", coalesce_interval_, 0.001);
     nh_param.param<bool>("default_trig_val",default_trig_val_,false);
     nh_param.param<bool>("sticky_buttons", sticky_buttons_, false);
+    nh_param.param<std::string>("topic_name", joy_topic_name_, "joy");
+
+    pub_ = nh_.advertise<sensor_msgs::Joy>(joy_topic_name_, 1);
 
     // Checks on parameters
     if (!joy_dev_name_.empty())
